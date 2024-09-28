@@ -9,37 +9,38 @@
 
 import os
 import shutil
-
 from paramiko import AutoAddPolicy, SSHClient
-import zipfile
-from zipfile import ZipFile
+
 
 
 def fetch_magData(Station):
-    os.chdir("C:/Users/Evan Hardt/Desktop/Picomation Data")
+    ROOT_DIR= "/home/echardt/Documents/PicomationData/"
+    os.chdir(ROOT_DIR)
     os.mkdir(Station['Name'])
-    cwd= os.chdir("C:/Users/Evan Hardt/Desktop/Picomation Data/" + Station['Name'])
+    cwd= os.chdir(ROOT_DIR + Station['Name'])
     Station['Local_Path']= os.getcwd()
-    os.system("wsl -e wget -r -np -nH --cut-dirs=2 -R index.html --no-check- " + Station["Picomation Dir"])
+    os.system("wget -r -np -nH --cut-dirs=2 -R index.html --no-check- " + Station["Picomation Dir"])
     for file in os.listdir(cwd):
         if not file.endswith('.log'):
             os.remove(file)
 
 def process_data(Station):
-    for file in os.listdir("C:/Users/Evan Hardt/Desktop/Picomation Data/AB4EJ"):
+    DIR="/home/echardt/Documents/PicomationData/" + Station['Name']
+    os.chdir(DIR)
+    for file in os.listdir(DIR):
         date= str(file).split("-")[1]
         year= date[0:4]
         month= date[4:6]
         day= date[6:8]
 
-        os.chdir("C:/Users/Evan Hardt/Desktop/Picomation Data/AB4EJ")
         filename= "OBS"+year+"-"+month+"-"+day+"T00:00"
         os.mkdir(filename)
-        #shutil.move(file, filename)
-        #shutil.make_archive(filename, "zip")
-
-        #os.remove(file)
-    
+        shutil.move(file, filename)
+        try:
+            os.system("zip -r " + filename + " " + filename)
+            os.system("rm -rf " + filename)
+        except FileExistsError:
+            continue
 
 def clean_Local_Storage(Station):
     os.remove(Station['Local_Path'])
@@ -62,9 +63,9 @@ def main():
          'Num_Files': 0}]
     
     for station in stations:
+        print(station['Name'])
         #fetch_magData(station)
-        process_data(station)
-
+        #process_data(station)
 
 if __name__ == "__main__":
     main()
