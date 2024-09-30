@@ -42,30 +42,62 @@ def process_data(Station):
         except FileExistsError:
             continue
 
-def clean_Local_Storage(Station):
-    os.remove(Station['Local_Path'])
-
-def main():
-    SERVER_ADDRESS= "10.116.35.24"
+def upload_data(Station):
+    SERVER_ADDRESS= "10.116.34.204"
     USERNAME= "root"
     PASSWD= "root"
     
     client= SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
-    #PSWS= client.connect(SERVER_ADDRESS, username=USERNAME, password=PASSWD)
+    client.connect(SERVER_ADDRESS, username=USERNAME, password=PASSWD)
+    client.close()
+
+def clean_Local_Storage(Station):
+    os.chdir("/home/echardt/Documents/PicomationData")
+    os.remove(Station['Local_Path'])
+
+def main():
 
     stations=[
         {'Name': "AB4EJ",
          'Picomation Dir': 'https://picomation.net/AB4EJ/',
          'PSWS dir': 'N000003',
          'Instrument': "Magnetometer2",
-         'Local_Path': None,
-         'Num_Files': 0}]
+         'Local_Path': None},
+         {'Name': "AC0G",
+         'Picomation Dir': 'https://picomation.net/AC0G/',
+         'PSWS dir': 'S000082',
+         'Instrument': "84",
+         'Local_Path': None},
+         {'Name': "JENNYJUMP",
+         'Picomation Dir': 'https://picomation.net/JENNYJUMP/',
+         'PSWS dir': 'S000033',
+         'Instrument': "Magnetometer",
+         'Local_Path': None},
+         {'Name': "K2KGJ",
+         'Picomation Dir': 'https://picomation.net/K2KGJ/',
+         'PSWS dir': 'S000165',
+         'Instrument': "165",
+         'Local_Path': None},
+         {'Name': "K4BSE",
+         'Picomation Dir': 'https://picomation.net/K4BSE/',
+         'PSWS dir': 'S000075',
+         'Instrument': "", #Station DOES NOT have a magnetometer attached. Need one created
+         'Local_Path': None},
+         {'Name': "KA2VLP",
+         'Picomation Dir': 'https://picomation.net/KA2VLP/',
+         'PSWS dir': 'S000132',
+         'Instrument': "138",
+         'Local_Path': None}]
     
-    for station in stations:
+    for station in stations[0:1]:
         print(station['Name'])
         #fetch_magData(station)
         #process_data(station)
+        #upload_data(station)
+        #clean_Local_Storage(station)
+        input("Next Station?")
+
 
 if __name__ == "__main__":
     main()
