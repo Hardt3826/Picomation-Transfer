@@ -1,0 +1,12 @@
+{'Name': "K4BSE",
+         'Picomation Dir': 'https://picomation.net/K4BSE/',
+         'PSWS dir': 'S000075',
+         'Token': '7bbb5756db3e3900da9e',
+         'Instrument': "", # Station DOES NOT have a magnetometer attached. Need one created
+         'Local_Path': None},
+         {'Name': "KD0EAG",  # No Station associated to user. Need one created, as well as a magnetometer instrument.
+         'Picomation Dir': 'https://picomation.net/KD0EAG/',
+         'PSWS dir': '',
+         'Token': '',
+         'Instrument': "",
+         'Local_Path': None}
